@@ -1,0 +1,6 @@
+@Data
+public class RegisterDTO {
+    private String login;
+    private String email;
+    private String senha;
+}
