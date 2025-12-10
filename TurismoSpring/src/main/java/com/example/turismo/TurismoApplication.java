@@ -1,4 +1,4 @@
-package com.example.turismo;
+ package com.example.turismo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
