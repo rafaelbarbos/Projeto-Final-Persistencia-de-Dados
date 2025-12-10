@@ -1,0 +1,38 @@
+@RestController
+@RequestMapping("/auth")
+@RequiredArgsConstructor
+public class AuthController {
+
+    private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder encoder;
+    private final JwtService jwtService;
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody RegisterDTO dto) {
+
+        if (usuarioRepository.existsByEmail(dto.getEmail())) {
+            return ResponseEntity.badRequest().body("E-mail já cadastrado.");
+        }
+
+        Usuario user = new Usuario(null, dto.getLogin(), dto.getEmail(),
+                encoder.encode(dto.getSenha()), "USER");
+        usuarioRepository.save(user);
+
+        return ResponseEntity.ok("Usuário registrado com sucesso.");
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginDTO dto) {
+
+        Usuario user = usuarioRepository.findByLogin(dto.getLogin())
+                .orElseThrow(() -> new RuntimeException("Login inválido"));
+
+        if (!encoder.matches(dto.getSenha(), user.getSenhaHash())) {
+            return ResponseEntity.status(401).body("Senha incorreta");
+        }
+
+        String token = jwtService.gerarToken(user.getLogin());
+
+        return ResponseEntity.ok(new AuthResponse(token));
+    }
+}
