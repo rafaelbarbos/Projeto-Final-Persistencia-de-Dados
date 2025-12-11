@@ -27,6 +27,7 @@ public class PontoTuristico {
     // média das avaliações
     private Double mediaNotas = 0.0;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name = "criado_por")
     private Usuario criadoPor;
 }

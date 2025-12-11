@@ -16,8 +16,10 @@ public class Avaliacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
+
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "ponto_turistico_id")
